@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Stank Tank Overlay</title>
+
+<style>
+:root {
+  --green: #27ff6a;
+  --purple: #a600ff;
+  --bg: rgba(0,0,0,0);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  overflow: hidden;
+  font-family: Impact, Arial Black, sans-serif;
+  color: white;
+}
+
+/* =====================
+   GLOBAL EFFECTS
+===================== */
+.glow {
+  text-shadow:
+    0 0 10px var(--purple),
+    0 0 25px var(--green);
+}
+
+.scanlines::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.03) 0px,
+    rgba(0,0,0,0.05) 2px
+  );
+  pointer-events: none;
+}
+
+/* =====================
+   LOGO
+===================== */
+.logo {
+  position: absolute;
+  width: 260px;
+  filter: drop-shadow(0 0 30px var(--green));
+  animation: pulse 4s infinite;
+}
+
+.logo img {
+  width: 100%;
+}
+
+/* =====================
+   TEXT
+===================== */
+.title {
+  font-size: 72px;
+  letter-spacing: 6px;
+}
+
+.sub {
+  font-size: 26px;
+  letter-spacing: 3px;
+  color: var(--green);
+}
+
+/* =====================
+   SCENES
+===================== */
+.scene {
+  display: none;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+/* ---- STARTING ---- */
+#starting {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ---- LIVE ---- */
+#live .logo {
+  top: 25px;
+  left: 25px;
+}
+
+#live .hud {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  padding: 14px 22px;
+  border: 2px solid var(--purple);
+  box-shadow: 0 0 20px var(--green);
+  background: rgba(0,0,0,0.5);
+}
+
+/* ---- CHAT ---- */
+#chat .logo {
+  bottom: 30px;
+  left: 30px;
+}
+
+#chat .chatbox {
+  position: absolute;
+  right: 40px;
+  bottom: 40px;
+  width: 420px;
+  height: 520px;
+  border: 3px solid var(--green);
+  box-shadow: 0 0 35px var(--purple);
+}
+
+/* ---- BRB ---- */
+#brb {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ---- ENDING ---- */
+#ending {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  animation: fadeout 10s forwards;
+}
+
+/* =====================
+   ANIMATIONS
+===================== */
+@keyframes pulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes fadeout {
+  to { opacity: 1; }
+}
+</style>
+</head>
+
+<body class="scanlines">
+
+<!-- STARTING -->
+<div id="starting" class="scene">
+  <div class="logo"><img src="logo.png"></div>
+  <div class="title glow">STREAM STARTING</div>
+  <div class="sub">PREPARE THE STANK</div>
+</div>
+
+<!-- LIVE -->
+<div id="live" class="scene">
+  <div class="logo"><img src="logo.png"></div>
+  <div class="hud glow">🔴 LIVE</div>
+</div>
+
+<!-- CHAT -->
+<div id="chat" class="scene">
+  <div class="logo"><img src="logo.png"></div>
+  <div class="chatbox"></div>
+</div>
+
+<!-- BRB -->
+<div id="brb" class="scene">
+  <div class="title glow">BRB</div>
+</div>
+
+<!-- ENDING -->
+<div id="ending" class="scene">
+  <div class="title glow">STREAM ENDED</div>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const scene = params.get("scene") || "live";
+document.getElementById(scene).style.display = "flex";
+</script>
+
+</body>
+</html>
